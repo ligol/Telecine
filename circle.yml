@@ -1,0 +1,15 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    TEST_FLAGS: "--configure-on-demand -PdisablePreDex"
+
+test:
+  override:
+    # run tests  against the emulator.
+    - ./gradlew clean check -Dpre-dex=false
+    # copy the build outputs to artifacts
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory.
+    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
